@@ -71,6 +71,13 @@ async function finish(completed) {
   await sync();
   if (!completed) return;
 
+  // storage.local.stats = { "YYYY-MM-DD": { sessions, minutes } }. Only completed sessions count.
+  const { stats = {} } = await browser.storage.local.get('stats');
+  const key = dayKey(new Date());
+  const day = stats[key] || { sessions: 0, minutes: 0 };
+  stats[key] = { sessions: day.sessions + 1, minutes: day.minutes + focus.minutes };
+  await browser.storage.local.set({ stats });
+
   await browser.notifications.create('focus-done', {
     type: 'basic',
     iconUrl: browser.runtime.getURL('icons/icon128.png'),

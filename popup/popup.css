@@ -129,7 +129,7 @@ legend { margin-bottom: 6px; padding: 0; color: var(--muted); }
   cursor: pointer;
 }
 .chips label:has(:checked) { border-color: var(--accent); }
-.chips input { margin: 0; accent-color: var(--accent); }
+.chips input { margin: 0; padding: 0; border: 0; accent-color: var(--accent); }
 #custom-row { display: flex; align-items: center; gap: 8px; }
 #custom-minutes { width: 80px; }
 .timer { margin: 4px 0; font-size: 40px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; text-align: center; }
@@ -138,3 +138,8 @@ button.link { align-self: flex-start; padding: 0; border: 0; background: none; c
 button.link:hover:not(:disabled) { background: none; }
 
 #status { min-height: 1.4em; margin: 0; padding: 0 12px 8px; color: var(--muted); }
+
+/* Stats footer */
+#stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 8px 12px; border-top: 1px solid var(--border); font-size: 12px; }
+#stats > span { display: flex; flex-direction: column; }
+.stat-label { color: var(--muted); font-size: 11px; }

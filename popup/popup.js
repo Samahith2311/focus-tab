@@ -228,10 +228,26 @@ $('focus-stop').addEventListener('click', async () => {
 
 $('open-options').addEventListener('click', () => browser.runtime.openOptionsPage());
 
+// ---------- Stats footer ----------
+
+async function renderStats() {
+  const { stats = {} } = await browser.storage.local.get('stats');
+  const { today, week, streak } = summarizeStats(stats);
+  const cell = (label, value) => el('span', {},
+    el('span', { className: 'stat-label', textContent: label }),
+    el('b', { textContent: value }));
+  $('stats').replaceChildren(
+    cell('Today', `${plural(today.sessions, 'session')} · ${today.minutes} min`),
+    cell('This week', `${plural(week.sessions, 'session')} · ${week.minutes} min`),
+    cell('Streak', plural(streak, 'day')));
+}
+
 browser.storage.onChanged.addListener(changes => {
   if (changes.focus) renderFocus();
+  if (changes.stats) renderStats();
 });
 
 renderTabs();
 renderSessions();
 renderFocus();
+renderStats();
