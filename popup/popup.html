@@ -8,6 +8,7 @@
 <body>
   <div class="tablist" role="tablist" aria-label="FocusTabs sections">
     <button role="tab" id="tab-tabs" aria-controls="panel-tabs" aria-selected="true">Tabs</button>
+    <button role="tab" id="tab-focus" aria-controls="panel-focus" aria-selected="false" tabindex="-1">Focus</button>
   </div>
 
   <section id="panel-tabs" role="tabpanel" aria-labelledby="tab-tabs">
@@ -26,9 +27,37 @@
     <ul id="sessions" class="list" aria-labelledby="sessions-heading"></ul>
   </section>
 
+  <section id="panel-focus" role="tabpanel" aria-labelledby="tab-focus" hidden>
+    <form id="focus-form">
+      <fieldset>
+        <legend>Session length</legend>
+        <div class="chips">
+          <label><input type="radio" name="duration" value="15"> 15 min</label>
+          <label><input type="radio" name="duration" value="25" checked> 25 min</label>
+          <label><input type="radio" name="duration" value="45"> 45 min</label>
+          <label><input type="radio" name="duration" value="60"> 60 min</label>
+          <label><input type="radio" name="duration" value="custom"> Custom</label>
+        </div>
+      </fieldset>
+      <label id="custom-row" hidden>Custom length in minutes
+        <input id="custom-minutes" type="number" min="1" max="600" value="30" required disabled>
+      </label>
+      <button class="primary">Start focus session</button>
+    </form>
+
+    <div id="focus-active" hidden>
+      <p id="focus-remaining" class="timer" role="timer" aria-label="Time remaining">--:--</p>
+      <p class="muted">Blocked sites redirect until the timer ends.</p>
+      <button id="focus-stop" type="button">End focus session</button>
+    </div>
+
+    <button id="open-options" type="button" class="link">Edit blocked sites</button>
+  </section>
+
   <p id="status" role="status" aria-live="polite"></p>
 
   <script src="../lib/browser-polyfill.js"></script>
+  <script src="../lib/util.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

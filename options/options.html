@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FocusTabs options</title>
+  <style>
+    /* color-scheme makes the page and its native controls follow the system theme */
+    :root { color-scheme: light dark; }
+    body { max-width: 520px; margin: 32px auto; padding: 0 16px; font: 14px/1.5 system-ui, sans-serif; }
+    h1 { font-size: 20px; }
+    label { display: block; margin-bottom: 4px; font-weight: 600; }
+    #hint { margin: 0 0 8px; }
+    textarea { box-sizing: border-box; width: 100%; padding: 8px; font: 13px/1.5 ui-monospace, Consolas, monospace; }
+    .actions { display: flex; gap: 8px; margin-top: 10px; }
+    button { padding: 6px 12px; font: inherit; }
+    #note { min-height: 1.5em; }
+  </style>
+</head>
+<body>
+  <h1>FocusTabs options</h1>
+  <form id="form">
+    <label for="blocklist">Sites blocked during a focus session</label>
+    <p id="hint">One domain per line. Subdomains are blocked too, so <code>youtube.com</code> also covers <code>m.youtube.com</code>.</p>
+    <textarea id="blocklist" rows="10" spellcheck="false" autocapitalize="off" aria-describedby="hint"></textarea>
+    <div class="actions">
+      <button>Save</button>
+      <button id="reset" type="button">Reset to defaults</button>
+    </div>
+  </form>
+  <p id="note" role="status" aria-live="polite"></p>
+
+  <script src="../lib/browser-polyfill.js"></script>
+  <script src="../lib/util.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

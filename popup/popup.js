@@ -187,5 +187,51 @@ $('session-form').addEventListener('submit', async e => {
   renderSessions();
 });
 
+// ---------- Focus mode ----------
+// The background script owns the session. The popup sends start/stop and mirrors storage.
+
+let countdown;
+
+async function renderFocus() {
+  const { focus } = await browser.storage.local.get('focus');
+  clearInterval(countdown);
+  $('focus-form').hidden = !!focus;
+  $('focus-active').hidden = !focus;
+  if (!focus) return;
+  const tick = () => { $('focus-remaining').textContent = formatRemaining(focus.endTime - Date.now()); };
+  tick();
+  countdown = setInterval(tick, 1000);
+}
+
+$('focus-form').addEventListener('change', e => {
+  const custom = new FormData(e.currentTarget).get('duration') === 'custom';
+  $('custom-row').hidden = !custom;
+  $('custom-minutes').disabled = !custom; // a disabled input is skipped by form validation
+});
+
+$('focus-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const choice = new FormData(e.currentTarget).get('duration');
+  const minutes = Number(choice === 'custom' ? $('custom-minutes').value : choice);
+  await browser.runtime.sendMessage({ type: 'start', minutes });
+  await renderFocus();
+  $('focus-stop').focus();
+  say(`Focus session started: ${minutes} min.`);
+});
+
+$('focus-stop').addEventListener('click', async () => {
+  await browser.runtime.sendMessage({ type: 'stop' });
+  await renderFocus();
+  $('focus-form').querySelector(':checked').focus();
+  say('Focus session ended.');
+});
+
+$('open-options').addEventListener('click', () => browser.runtime.openOptionsPage());
+
+browser.storage.onChanged.addListener(changes => {
+  if (changes.focus) renderFocus();
+});
+
 renderTabs();
 renderSessions();
+renderFocus();
